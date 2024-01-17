@@ -22,7 +22,7 @@
 - **Cancelar Consultas**
     - Opção para cancelar consultas agendadas, com confirmação para evitar cancelamentos acidentais.
 
-## 🧑‍⚕️ ADMINISTRADORES
+## 🧑‍⚕ ADMINISTRADORES
 - **Exibir Usuários**
     - Visualize a lista de usuários cadastrados no sistema.
 
