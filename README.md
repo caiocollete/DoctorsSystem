@@ -1,22 +1,22 @@
 # ⚕️ PROJETO DE SISTEMAS PARA UM CONSULTÓRIO - EM DESENVOLVIMENTO
 
 <div align="center">
-    <p><strong>Progresso do Projeto:</strong><br>[===== ㅤㅤㅤ ] 50%</p>
+    <p><strong>Progresso do Projeto:</strong><br>[========= ] 90%</p>
 </div>
 
 # 🛠️ Funcionalidades
 
 ## 🧑 USUÁRIOS
-- **Cadastro** ✅
+- **Cadastro**
     - Permita que os usuários se cadastrem no sistema para acessar os serviços.
 
-- **Login** ✅
+- **Login**
     - Sistema de autenticação para garantir a segurança e privacidade dos usuários.
 
-- **Marcar Consulta** ✅
+- **Marcar Consulta**
     - Agende consultas de forma rápida e eficiente.
 
-- **Verificar Consultas Agendadas** ✅
+- **Verificar Consultas Agendadas**
     - Acesse as consultas marcadas e suas informações.
 
 - **Cancelar Consultas**
@@ -29,12 +29,9 @@
 - **Exibir Consultas**
     - Tenha acesso às informações detalhadas sobre todas as consultas marcadas.
 
-# 🚀 Como Iniciar
+# 🚀 REQUISITOS
 
-1. Clone o repositório: `git clone [https://github.com/caiocollete/DoctorsSystem.git]`
-2. Instale as dependências: `npm install` ou `yarn install`
-3. Configure as variáveis de ambiente, se necessário.
-4. Inicie o servidor: `npm start` ou `yarn start`
+1. O é necessario possuir o conio instalado em sua maquina.
 
 # 📋 Contribuições
 
