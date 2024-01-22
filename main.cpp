@@ -21,6 +21,7 @@ struct User{
 };
 
 struct Consulta{
+	int pos=0;
 	Data dtConsulta;
 	Hora hrConsulta;
 	char usuario[TF];
@@ -36,11 +37,21 @@ void MenuUser();
 
 void startFiles(){
     FILE *User = fopen("Users.dat","ab");
-    FILE *Adm = fopen("secrets.dat","ab");
     FILE *Cons = fopen("Consultas.dat","ab");
     fclose(Cons);
     fclose(User);
     fclose(Adm);
+}
+void startAdmin(){
+	User Reg;
+	FILE *Adm = fopen("secrets.dat","wb");
+	
+	strcpy(Reg.usuario,"admin");
+	strcpy(Reg.senha,"admin");
+	Reg.status='S';
+	
+	fwrite(&Reg,sizeof(User),1,Adm);
+	fclose(Adm);
 }
 
 int buscaUser(char user[],FILE *Ptr){
@@ -54,6 +65,16 @@ int buscaUser(char user[],FILE *Ptr){
         return ftell(Ptr) - sizeof(User);
     }
     else return -1;
+}
+
+int excluiConsulta(int pos, FILE *Ptr){
+	Consulta Reg;
+	
+	fseek(Ptr,pos*sizeof(Ptr),SEEK_SET);
+	fread(&Reg,sizeof(Consulta),1,Ptr);
+	Reg.status = 'I';
+	fseek(Ptr,pos*sizeof(Ptr),SEEK_SET);
+	fwrite(&Reg,sizeof(Consulta),1,Ptr);
 }
 
 void Menu(){
@@ -70,6 +91,12 @@ void MenuUser(){
     printf("[TAB] - SAIR\n");
 }
 
+void MenuAdmin(){
+	printf("[1] - Visualizar Usuarios\n");
+    printf("[2] - Visualizar consultas\n");
+    printf("[TAB] - SAIR\n");
+}
+
 void MarcarConsulta(User Reg,FILE *PtrUser){
 	FILE *PtrConsultas = fopen("Consultas.dat","ab");
 	Consulta RegConsulta;
@@ -82,6 +109,8 @@ void MarcarConsulta(User Reg,FILE *PtrUser){
 	RegConsulta.status='A';
 	strcpy(RegConsulta.usuario,Reg.usuario);
 	
+	fseek(PtrConsultas,0,SEEK_END);
+	RegConsulta.pos=ftell(PtrConsultas)/sizeof(Consulta);
 	fwrite(&RegConsulta,sizeof(Consulta),1,PtrConsultas);
 	
 	Reg.qntdConsultasON++;
@@ -105,7 +134,7 @@ void VerificarConsulta(char usuario[]){
 		fread(&Reg,sizeof(Consulta),1,PtrConsultas);
 		if(strcmp(Reg.usuario,usuario)==0 && Reg.status=='A'){
 			i++;
-			printf("%d/%d/%d - %d:%d\n",Reg.dtConsulta.dia,Reg.dtConsulta.mes,Reg.dtConsulta.ano,Reg.hrConsulta.hora,Reg.hrConsulta.min);
+			printf("%d) %d/%d/%d - %d:%d\n",Reg.pos+1,Reg.dtConsulta.dia,Reg.dtConsulta.mes,Reg.dtConsulta.ano,Reg.hrConsulta.hora,Reg.hrConsulta.min);
 		}
 	}
 	if(i==0){
@@ -115,7 +144,48 @@ void VerificarConsulta(char usuario[]){
 	fclose(PtrConsultas);
 }
 
+void CancelarConsulta(User Reg,FILE *PtrUser){
+	clrscr();
+	FILE *PtrConsultas = fopen("Consultas.dat","ab");
+	Consulta RegConsulta;
+	int pos;
+	
+	printf("Qual consulta deseja cancelar? [EX: 1]\n");
+	scanf("%d",&pos);
+	pos--;
+	printf("%d",pos);
+	getch();
+	
+	excluiConsulta(pos,PtrConsultas);
+	
+	fclose(PtrConsultas);
+}
 
+void exibirUsuarios(){
+	FILE *Ptr = fopen("Users.dat","rb");
+	User Reg;
+	
+	fread(&Reg,sizeof(User),1,Ptr);
+	while(!feof(Ptr)){
+		printf("%s - [%d] - %c",Reg.usuario,Reg.qntdConsultasON,Reg.status);
+		fread(&Reg,sizeof(User),1,Ptr);
+	}
+	
+	fclose(Ptr);
+}
+
+void admConsultas(){
+	FILE *Ptr = fopen("Consultas.dat","rb");
+	Consulta Reg;
+	
+	fread(&Reg,sizeof(Consulta),1,Ptr);
+	while(!feof(Ptr)){
+		printf("%s - [%d/%d/%d - %d:%d] %c",Reg.usuario,Reg.dtConsulta.dia,Reg.dtConsulta.mes,Reg.dtConsulta.ano,Reg.hrConsulta.hora,Reg.hrConsulta.min,Reg.status);
+		fread(&Reg,sizeof(Consulta),1,Ptr);
+	}
+	
+	fclose(Ptr);
+}
 
 void Login(){
     FILE *PtrUser = fopen("Users.dat","rb");
@@ -146,7 +216,7 @@ void Login(){
                 switch (esc) {
                     case '1': MarcarConsulta(Reg,PtrUser);break;
                     case '2': VerificarConsulta(Reg.usuario);break;
-                    //case '3': CancelarConsulta();break;
+                    case '3': CancelarConsulta(Reg,PtrUser);break;
                 }
             }while(esc!=9);
 	    	}
@@ -192,10 +262,66 @@ void Cadastro(){
 	fclose(PtrUser);
 }
 
+void Admin(){
+    FILE *PtrAdmin = fopen("secrets.dat","rb");
+    clrscr();
 
+    User Reg;
+    char usuario[TF],senha[TF];
+    int esc,pos;
+
+    printf("USERNAME: ");
+    fflush(stdin);
+    gets(usuario);
+    printf("SENHA: ");
+    fflush(stdin);
+    gets(senha);
+
+    pos=buscaUser(usuario,PtrAdmin);
+    
+    if(pos!=-1){
+	   	fseek(PtrAdmin,pos,SEEK_SET);
+        fread(&Reg,sizeof(User),1,PtrAdmin);
+    	if(Reg.status=='S'){
+    		if(strcmp(Reg.senha,senha)==0){
+	            do{
+	            	clrscr();
+	            	MenuAdmin();
+	            	esc=getch();
+	                switch (esc) {
+	                    case '1': exibirUsuarios();break;
+	                    case '2': admConsultas();break;
+	                }
+	            }while(esc!=9);
+	    	}
+	    	else{
+	    		printf("SENHA INVALIDA!\n");
+	    	}
+    	}
+    	else{
+    		printf("Permissoes administrativas negadas!\n");
+        	getch();
+    	}
+	}
+    else{
+        printf("Usuario nao encontrado!\n");
+        getch();
+    }
+    fclose(PtrUser);
+}
+
+
+void excluiCadastrosInativos(){
+	
+}
+
+void excluiConsultasInativas(){
+	
+}
 
 int main(void){
     startFiles();
+    startAdmin();
 
     int esc;
 
@@ -206,7 +332,7 @@ int main(void){
         switch (esc) {
             case '1': Login(); break;
             case '2': Cadastro(); break;
-            // case 3: Admin(); break;
+            case '3': Admin(); break;
         }
     } while (esc != 27);
 
