@@ -44,7 +44,3 @@ Este projeto está em desenvolvimento e há muitas funcionalidades a serem imple
 # 📝 Licença
 
 Este projeto está licenciado sob a [Licença MIT](https://opensource.org/licenses/MIT) - veja o arquivo [LICENSE.md](LICENSE.md) para mais detalhes.
-
----
-
-**Observação:** Substitua os espaços reservados (URL do logo, seu usuário e projeto no GitHub) pelas informações específicas do seu projeto. Personalize o README de acordo com as necessidades e características únicas do seu sistema para um consultório.
