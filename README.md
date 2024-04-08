@@ -31,7 +31,7 @@
 
 # 🚀 REQUISITOS
 
-1. O é necessario possuir o <a href="https://github.com/Fernando-Lafeta/Biblioteca-Conio-2">conio<\a> instalado em sua maquina.
+1. O é necessario possuir o <a href="https://github.com/Fernando-Lafeta/Biblioteca-Conio-2">conio</a> instalado em sua maquina.
 
 # 📋 Contribuições
 
