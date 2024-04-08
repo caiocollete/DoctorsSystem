@@ -40,7 +40,3 @@ Aceitamos e incentivamos contribuições. Sinta-se à vontade para abrir uma iss
 # 🚧 Em Desenvolvimento
 
 Este projeto está em desenvolvimento e há muitas funcionalidades a serem implementadas além do que está descrito. Este é um projeto de treino, e melhorias são bem-vindas.
-
-# 📝 Licença
-
-Este projeto está licenciado sob a [Licença MIT](https://opensource.org/licenses/MIT) - veja o arquivo [LICENSE.md](LICENSE.md) para mais detalhes.
